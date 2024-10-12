@@ -1,6 +1,7 @@
 package com.metinozcura.rickandmorty.base
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,12 +35,14 @@ abstract class BaseFragment<DB : ViewDataBinding, VM : BaseViewModel> : Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.e("BaseFragment","onCreate")
         viewModel = getVM()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bindVM(binding, viewModel)
+        Log.e("BaseFragment","ONVIEWCREATED")
         with(viewModel) {
             observe(progressLiveEvent) { show ->
                 if (show) (activity as BaseActivity<*, *>).showProgress()

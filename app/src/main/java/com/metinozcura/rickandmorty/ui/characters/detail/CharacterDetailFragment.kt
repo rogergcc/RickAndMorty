@@ -22,7 +22,7 @@ class CharacterDetailFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedElementEnterTransition =
-            TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+            TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
     }
 
     override fun bindVM(binding: FragmentCharacterDetailBinding, vm: CharacterDetailViewModel) {
