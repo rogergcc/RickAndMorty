@@ -2,6 +2,9 @@ package com.metinozcura.rickandmorty.util
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
+import android.util.Log
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
@@ -12,8 +15,10 @@ class NetworkConnectionInterceptor(context: Context) : Interceptor {
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
-        if (!isConnected)
+        if (!isConnected) {
+            Log.e("TEST_LOGGER","[NetworkConnectionInterceptor] No Internet Connection")
             throw NoConnectionException()
+        }
         val builder: Request.Builder = chain.request().newBuilder()
         return chain.proceed(builder.build())
     }
@@ -22,8 +27,15 @@ class NetworkConnectionInterceptor(context: Context) : Interceptor {
         get() {
             val connectivityManager =
                 mContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val netInfo = connectivityManager.activeNetworkInfo
-            return netInfo != null && netInfo.isConnected
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val network = connectivityManager.activeNetwork
+                val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
+                networkCapabilities != null &&
+                        networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            } else {
+                val networkInfo = connectivityManager.activeNetworkInfo
+                networkInfo != null && networkInfo.isConnected
+            }
         }
 
     inner class NoConnectionException : IOException() {

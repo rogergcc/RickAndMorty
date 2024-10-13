@@ -4,10 +4,10 @@ import android.content.Context
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.metinozcura.rickandmorty.util.NetworkConnectionInterceptor
 import com.metinozcura.rickandmorty.data.service.CharacterApi
 import com.metinozcura.rickandmorty.data.service.EpisodeApi
 import com.metinozcura.rickandmorty.data.service.LocationApi
+import com.metinozcura.rickandmorty.util.NetworkConnectionInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,6 +22,9 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
+
+
+
     @Provides
     @Singleton
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor =
@@ -31,7 +34,7 @@ class NetworkModule {
     @Singleton
     fun provideOkHttpClient(
         @ApplicationContext context: Context,
-        httpLoggingInterceptor: HttpLoggingInterceptor
+        httpLoggingInterceptor: HttpLoggingInterceptor,
     ): OkHttpClient =
         OkHttpClient.Builder().apply {
             interceptors().add(httpLoggingInterceptor)

@@ -1,6 +1,7 @@
 package com.metinozcura.rickandmorty.ui.main
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
@@ -29,6 +30,18 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         }
+
+        /*
+        popBackStack is necessary in this case if the app is started from the deep link.
+         */
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (currentNavController?.value?.popBackStack() != true) {
+                    finish()
+                }
+            }
+        })
+
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -60,9 +73,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     /**
      * Overriding popBackStack is necessary in this case if the app is started from the deep link.
      */
-    override fun onBackPressed() {
-        if (currentNavController?.value?.popBackStack() != true) {
-            super.onBackPressed()
-        }
-    }
+//    override fun onBackPressed() {
+//        if (currentNavController?.value?.popBackStack() != true) {
+//            super.onBackPressed()
+//        }
+//    }
 }

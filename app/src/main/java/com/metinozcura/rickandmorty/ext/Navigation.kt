@@ -69,7 +69,7 @@ fun BottomNavigationView.setupWithNavController(
     var isOnFirstFragment = selectedItemTag == firstFragmentTag
 
     // When a navigation item is selected
-    setOnNavigationItemSelectedListener { item ->
+    setOnItemSelectedListener { item ->
         // Don't do anything if the state is state has already been saved.
         if (fragmentManager.isStateSaved) {
             false

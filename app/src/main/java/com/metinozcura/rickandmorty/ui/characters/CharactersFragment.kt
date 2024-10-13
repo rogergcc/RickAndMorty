@@ -1,5 +1,6 @@
 package com.metinozcura.rickandmorty.ui.characters
 
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
@@ -47,9 +48,18 @@ class CharactersFragment : BaseFragment<FragmentCharactersBinding, CharactersVie
                 characterClickListener = this@CharactersFragment
 
                 with(vm) {
+//                    launchOnLifecycleScope {
+//                        isConnected.observe(viewLifecycleOwner) { connected ->
+//                            if (!connected) {
+//                                Toast.makeText(requireContext(), "No internet", Toast.LENGTH_SHORT).show()
+//                            }
+//                        }
+//                    }
                     launchOnLifecycleScope {
                         charactersFlow.collectLatest { submitData(it) }
+
                     }
+
                     launchOnLifecycleScope {
                         loadStateFlow.collectLatest {
                             swipeRefresh.isRefreshing = it.refresh is LoadState.Loading

@@ -10,8 +10,11 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.metinozcura.rickandmorty.ext.observe
+import kotlinx.coroutines.launch
 
 abstract class BaseFragment<DB : ViewDataBinding, VM : BaseViewModel> : Fragment() {
     private lateinit var viewModel: VM
@@ -56,8 +59,10 @@ abstract class BaseFragment<DB : ViewDataBinding, VM : BaseViewModel> : Fragment
     }
 
     fun launchOnLifecycleScope(execute: suspend () -> Unit) {
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            execute()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                execute()
+            }
         }
     }
 }
